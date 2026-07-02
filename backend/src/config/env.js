@@ -11,12 +11,12 @@ if (missing.length) {
   nodeEnv: process.env.NODE_ENV || 'development',
   clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
   mongoUri: process.env.MONGO_URI,
-  // jwt: {
-  //   accessSecret: process.env.JWT_ACCESS_SECRET,
-  //   refreshSecret: process.env.JWT_REFRESH_SECRET,
-  //   accessExpires: process.env.JWT_ACCESS_EXPIRES || '15m',
-  //   refreshExpiresDays: Number(process.env.JWT_REFRESH_EXPIRES_DAYS) || 7,
-  // },
+  jwt: {
+    accessSecret: process.env.JWT_ACCESS_SECRET,
+    refreshSecret: process.env.JWT_REFRESH_SECRET,
+    accessExpires: process.env.JWT_ACCESS_EXPIRES || 900000,
+    refreshExpiresDays: process.env.JWT_REFRESH_EXPIRES_DAYS || 604800000,
+  },
   // otpExpiresMinutes: Number(process.env.OTP_EXPIRES_MINUTES) || 10,
   // seed: {
   //   email: process.env.SEED_SUPERADMIN_EMAIL || 'superadmin@example.com',

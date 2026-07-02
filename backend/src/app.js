@@ -16,13 +16,16 @@ export function createApp() {
       credentials: true,
     }),
   );
-  app.use(express.json(), express.urlencoded({ extended: true }));
+  app.use(
+    express.json({ limit: "5mb" }),
+    express.urlencoded({ extended: true, limit: "5mb" }),
+  );
   app.use(cookieParser());
   app.use(morgan(env.isProd ? "combined" : "dev", { stream: morganStream }));
   app.use(requestContext);
 
   //Routes
-app.use('/api',routes)
+  app.use("/api", routes);
 
   app.use(notFound);
   app.use(errorHandler);

@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import env from "../config/env.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -33,6 +35,36 @@ userSchema.pre("save", async function () {
 userSchema.methods.comparePassword = function (candidate) {
   return bcrypt.compare(candidate, this.password);
 };
+
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      id: this._id,
+    },
+    env.jwt.accessSecret,
+    {
+      expiresIn: env.jwt.accessExpires,
+    },
+  );
+};
+userSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    { id: this._id },
+    env.jwt.refreshSecret,
+    { expiresIn: env.jwt.refreshExpiresDays }, // longer-lived
+  );
+};
+userSchema.statics.decodeAccessToken = function (accessToken) {
+  return jwt.verify(accessToken, env.jwt.accessSecret);
+};
+userSchema.statics.decodeRefreshToken = function (refreshToken) {
+  return jwt.verify(refreshToken, env.jwt.refreshSecret);
+};
+userSchema.statics.hashPassword = async function (password) {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
+};
+
 userSchema.set("toJSON", {
   virtuals: true,
   transform: (_doc, ret) => {

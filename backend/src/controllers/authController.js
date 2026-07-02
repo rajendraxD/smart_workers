@@ -1,9 +1,11 @@
+import { logger } from "../config/logger.js";
 import UserModel from "../models/UserModel.js";
 import { emailTemplates } from "../services/emailService.js";
 import { notify } from "../services/notificationService.js";
 import { ApiError } from "../utils/ApiError.js";
 import { sendSuccess } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { generateToken } from "../utils/token.js";
 
 export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -26,10 +28,7 @@ export const register = asyncHandler(async (req, res) => {
     },
   });
 
-  return sendSuccess(res, {
-    statusCode: 201,
-    message: "Registration successful",
-  });
+  generateToken(user, 201, "Register successful", res);
 });
 
 export const login = asyncHandler(async (req, res) => {
@@ -54,9 +53,22 @@ export const login = asyncHandler(async (req, res) => {
       ...emailTemplates.login(user.name),
     },
   });
-  return sendSuccess(res, {
-    statusCode: 201,
-    message: "Login successful",
-    data: user,
-  });
+  generateToken(user, 200, "Login successful", res);
+});
+
+export const logout = asyncHandler(async (req, res, next) => {
+  res
+    .cookie("accessToken", "", {
+      maxAge: 0,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
+    .cookie("refreshToken", "", {
+      maxAge: 0,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+  return sendSuccess(res, { message: "User logged out successfully" });
 });
