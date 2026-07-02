@@ -44,7 +44,7 @@ export const generateToken = (user, statusCode, message, res) => {
 
   user.password = undefined; // remove password from response object();
 
-   res
+  res
     .cookie("accessToken", accessToken, {
       // maxAge: env.jwt.accessExpires,
       maxAge: env.jwt.accessExpires,
@@ -57,6 +57,6 @@ export const generateToken = (user, statusCode, message, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-    })
-    return sendSuccess(res, { statusCode, message, data: user });
+    });
+  return sendSuccess(res, { statusCode, message, data: user });
 };
