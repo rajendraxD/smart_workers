@@ -1,0 +1,26 @@
+{
+  "name": "smart_workers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run start --prefix backend\" \"npm run dev --prefix frontend\" ",
+    "dev": "concurrently \"npm run start --prefix backend\" \"npm run dev --prefix frontend\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajendraxD/smart_workers.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/rajendraxD/smart_workers/issues"
+  },
+  "homepage": "https://github.com/rajendraxD/smart_workers#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
