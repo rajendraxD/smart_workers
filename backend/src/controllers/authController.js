@@ -2,6 +2,7 @@ import UserModel from "../models/UserModel.js";
 import { emailTemplates } from "../services/emailService.js";
 import { notify } from "../services/notificationService.js";
 import { ApiError } from "../utils/ApiError.js";
+import { sendSuccess } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const register = asyncHandler(async (req, res) => {
@@ -25,7 +26,10 @@ export const register = asyncHandler(async (req, res) => {
     },
   });
 
-  return res.status(201).json({ message: "Registration successful" });
+  return sendSuccess(res, {
+    statusCode: 201,
+    message: "Registration successful",
+  });
 });
 
 export const login = asyncHandler(async (req, res) => {
