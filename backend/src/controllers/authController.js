@@ -35,21 +35,28 @@ export const register = asyncHandler(async (req, res) => {
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await UserModel.findOne({ email });
-console.log(user)
   if (!user) {
-    throw ApiError.unauthorized("Invalid email or password");
+    throw ApiError.badRequest("Invalid email or password");
   }
 
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
-    throw ApiError.unauthorized("Invalid email or password");
+    throw ApiError.badRequest("Invalid email or password");
   }
 
-  // notify({
-  //   userId: user._id,
-  //   event: "LOGIN",
-  //   title: "Login",
-  //   message: "User logged in",
-  // });
-  return res.status(200).json({ message: "Login successful" });
+  notify({
+    userId: user._id,
+    event: "LOGIN",
+    title: "Login",
+    message: "User logged in",
+    email: {
+      to: user.email,
+      ...emailTemplates.login(user.name),
+    },
+  });
+  return sendSuccess(res, {
+    statusCode: 201,
+    message: "Login successful",
+    data: user,
+  });
 });

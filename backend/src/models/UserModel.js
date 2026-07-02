@@ -33,6 +33,17 @@ userSchema.pre("save", async function () {
 userSchema.methods.comparePassword = function (candidate) {
   return bcrypt.compare(candidate, this.password);
 };
+userSchema.set("toJSON", {
+  virtuals: true,
+  transform: (_doc, ret) => {
+    delete ret.password;
+    delete ret.resetOtpHash;
+    delete ret.resetOtpExpires;
+    delete ret.__v;
+    delete ret._id;
+    return ret;
+  },
+});
 
 const UserModel = mongoose.model("User", userSchema);
 export default UserModel;

@@ -9,12 +9,11 @@ const passwordRule = Joi.string()
   );
 
 const email = Joi.string()
-  .email(
-    {
+  .email({
     minDomainSegments: 2, // at least 2 segments (e.g. gmail.com, outlook.com)
-    // tlds: { allow: ["com"] },
-  }
-)
+    tlds: { allow: ["com"] },
+  })
+  // .pattern(/@gmail\.com$/)
   .message("Enter a valid email address")
   .lowercase()
   .required();

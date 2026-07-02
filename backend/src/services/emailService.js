@@ -15,6 +15,15 @@ function getTransporter() {
   });
   return transporter;
 }
+const timestamp = new Intl.DateTimeFormat("en-GB", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: true,
+}).format(new Date());
 
 export async function sendEmail({ to, subject, html, text }) {
   const tx = getTransporter();
@@ -37,4 +46,9 @@ export const emailTemplates = {
     text: `Hi ${name}, your password reset code is ${code}. It expires in ${minutes} minutes.`,
     html: `<p>Hi <b>${name}</b>,</p><p>Your password reset code is <b style="font-size:18px">${code}</b>.</p><p>It expires in ${minutes} minutes.</p>`,
   }),
+  login:(name)=>({
+    subject: 'Login',
+    text: `Hi ${name}, you have logged in successfully.`,
+    html: `<p>Hi <b>${name}</b>,</p><p>You have logged in successfully at ${timestamp}.</p>`,
+  })
 };
